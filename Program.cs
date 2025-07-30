@@ -4,6 +4,7 @@ using MinimalApi.DTOs;
 using MinimalApi.Dominio.Interfaces;
 using MinimalApi.Dominio.Servicos;
 using Microsoft.AspNetCore.Mvc;
+using MinimalApi.Dominio.ModelViews;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,8 @@ var app = builder.Build();
 
 
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => Results.Json(new Home()));
+
 
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorServico administradorServico) =>
 {
