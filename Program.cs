@@ -5,14 +5,15 @@ using MinimalApi.Dominio.Interfaces;
 using MinimalApi.Dominio.Servicos;
 using Microsoft.AspNetCore.Mvc;
 using MinimalApi.Dominio.ModelViews;
+using MinimalApi.Dominio.Entidades;
 
+#region Builder
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddScoped<IAdministradorServico, AdministradorServico>();
+builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<DbContexto>(options =>
 {
     options.UseMySql(
@@ -20,16 +21,15 @@ builder.Services.AddDbContext<DbContexto>(options =>
       ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("mysql"))
     );
 });
-
-
 var app = builder.Build();
+#endregion
 
-
-
+#region Home
 app.MapGet("/", () => Results.Json(new Home()));
+#endregion
 
-
-app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorServico administradorServico) =>
+#region Administradores
+app.MapPost("/administradores/login", ([FromBody] LoginDTO loginDTO, IAdministradorServico administradorServico) =>
 {
     if (administradorServico.Login(loginDTO) != null)
     {
@@ -38,11 +38,27 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorServico admin
     else
         return Results.Unauthorized();
 });
+#endregion
 
+#region Veículos
+app.MapPost("/veiculos", ([FromBody] VeiculoDTO veiculoDTO, IVeiculoServico veiculoServico) =>
+{
+    var veiculo = new Veiculo
+    {
+        Nome = veiculoDTO.Nome,
+        Marca = veiculoDTO.Marca,
+        Ano = veiculoDTO.Ano
+    };
+    veiculoServico.Incluir(veiculo);
+    return Results.Created($"/veiculos/{veiculo.Id}", veiculo);
+});
+#endregion
+
+#region App
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.Run();
-
+#endregion
 
 
