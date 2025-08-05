@@ -29,7 +29,7 @@ public class VeiculoServico : IVeiculoServico
         // Lógica de exclusão do veículo
     }
 
-    public Veiculo? BuscadorPorId(int id)
+    public Veiculo? BuscarPorId(int id)
     {
         return _conexto.Veiculos
             .Where(v => v.Id == id)
