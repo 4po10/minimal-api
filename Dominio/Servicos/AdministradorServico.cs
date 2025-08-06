@@ -13,7 +13,7 @@ public class AdministradorServico : IAdministradorServico
     {
         _conexto = contexto;
     }
-public Administrador? BuscarPorId(int id)
+    public Administrador? BuscarPorId(int id)
     {
         return _conexto.Administradores
             .Where(v => v.Id == id)
@@ -30,15 +30,12 @@ public Administrador? BuscarPorId(int id)
     {
         var adm = _conexto.Administradores.Where(a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).FirstOrDefault();
         return adm;
-        
-
 
     }
 
     public List<Administrador> Todos(int? pagina)
     {
         var query = _conexto.Administradores.AsQueryable();
-
         int itensPorPagina = 10;
 
         if (pagina != null)
@@ -46,7 +43,6 @@ public Administrador? BuscarPorId(int id)
             query = query.Skip(((int)pagina - 1) * itensPorPagina)
                      .Take(itensPorPagina);
         }
-
 
         return query.ToList();
     }

@@ -42,7 +42,6 @@ public class VeiculoServico : IVeiculoServico
         _conexto.SaveChanges();
     }
 
-
     public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null)
     {
         var query = _conexto.Veiculos.AsQueryable();
@@ -58,8 +57,6 @@ public class VeiculoServico : IVeiculoServico
             query = query.Skip(((int)pagina - 1) * itensPorPagina)
                      .Take(itensPorPagina);
         }
-
-
         return query.ToList();
     }
 
